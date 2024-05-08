@@ -1,4 +1,3 @@
-from __future__ import print_function
 import urllib3
 from botocore.exceptions import ClientError
 import boto3

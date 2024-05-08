@@ -3,7 +3,7 @@ version: 0.2
 phases:
    install:
     runtime-versions:
-       python: 3.7
+       python: 3.12
    pre_build:
         commands:
         - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -

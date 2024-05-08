@@ -3,19 +3,16 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.7
+      python: 3.12
       
   pre_build:
     commands:
       - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-      - apt-get update && apt-get install -y python-dev jq wget net-tools apt-transport-https gnupg
+      - apt-get update && apt-get install -y jq wget net-tools apt-transport-https gnupg
       - wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | apt-key add -
       - echo deb https://aquasecurity.github.io/trivy-repo/deb bionic main | tee -a /etc/apt/sources.list.d/trivy.list
       - apt-get update && apt-get install -y trivy
-      - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-      - python3 get-pip.py
-      - pip3 install awscli
-      - $(aws ecr get-login --no-include-email)
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - IMAGE_TAG_FOR_AUDIT=`aws ssm get-parameter --name "destinationCommit" --query "Parameter.Value" --output text`
       - curl https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/asff.tpl -o asff.tpl 
       - ls asff.tpl

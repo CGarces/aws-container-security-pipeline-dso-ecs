@@ -67,7 +67,7 @@ Resources:
           NO_ARTIFACTS
       Environment:
         ComputeType: BUILD_GENERAL1_SMALL
-        Image: aws/codebuild/standard:5.0-22.06.30
+        Image: aws/codebuild/standard:7.0
         PrivilegedMode: True
         Type: LINUX_CONTAINER
         ImagePullCredentialsType: CODEBUILD
@@ -76,6 +76,9 @@ Resources:
             Value: !Sub
               - ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${Repo}
               - { Repo: !Ref TrivyRepository}
+          - Name: AWS_ACCOUNT_ID
+            Type: PLAINTEXT
+            Value: !Ref "AWS::AccountId"
       Name: !Join [ '-', [ !Ref ResourceName, 'Trivy', 'build'  ] ]
       ServiceRole: !GetAtt TrivyCodeBuildRole.Arn
       Source:
@@ -86,15 +89,10 @@ Resources:
           phases:
             install:
               runtime-versions:
-                python: 3.7
+                python: 3.12
             pre_build:
               commands:
-                - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-                - apt-get update && apt-get install -y python-dev
-                - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-                - python get-pip.py
-                - pip install awscli
-                - $(aws ecr get-login --no-include-email)
+                - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
             build:
               commands:
                 - docker build $CODEBUILD_SRC_DIR -t $IMAGE
@@ -138,7 +136,7 @@ Resources:
     Properties:
       FunctionName: !Join [ '-', [ !Ref ResourceName, 'codebuild', 'starter'  ] ]
       Role: !GetAtt CodeBuildStarterLambdaRole.Arn
-      Runtime: python3.7
+      Runtime: python3.12
       Handler: index.handler
       Code:
         ZipFile: |

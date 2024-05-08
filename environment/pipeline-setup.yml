@@ -92,7 +92,7 @@ Resources:
       Code:
         S3Bucket: !Ref DevSecOpsResources
         S3Key: 'devsecops/initial-commit.zip'
-      Runtime: "python3.7"
+      Runtime: "python3.12"
       Timeout: "35"
 
   ### ECR Repository
@@ -211,7 +211,6 @@ Resources:
       Role: !GetAtt 'LambdaPRCommentRole.Arn'
       Code:
         ZipFile: |
-          from __future__ import print_function
           import datetime
           import boto3
           import os
@@ -282,7 +281,7 @@ Resources:
                 name=pipeline,
               )
 
-      Runtime: "python3.7"
+      Runtime: "python3.12"
       Timeout: "35"
       MemorySize: 128
 
@@ -332,7 +331,6 @@ Resources:
       Role: !GetAtt 'LambdaPRCommentRole.Arn'
       Code:
         ZipFile: |
-          from __future__ import print_function
           import boto3
           import os
           import json
@@ -397,7 +395,7 @@ Resources:
             ssm.delete_parameter(
               Name='codebuild-dockerfile-results'
             )
-      Runtime: "python3.7"
+      Runtime: "python3.12"
       Timeout: "35"
       MemorySize: 128
 
@@ -445,7 +443,6 @@ Resources:
       Role: !GetAtt 'LambdaPRCommentRole.Arn'
       Code:
         ZipFile: |
-          from __future__ import print_function
           import boto3
           import os
           import json
@@ -501,7 +498,7 @@ Resources:
               afterCommitId = destination_commit['Parameter']['Value'],
               content = content
             )
-      Runtime: "python3.7"
+      Runtime: "python3.12"
       Timeout: "35"
       MemorySize: 128
 
@@ -549,7 +546,6 @@ Resources:
       Role: !GetAtt 'LambdaPRCommentRole.Arn'
       Code:
         ZipFile: |
-          from __future__ import print_function
           import boto3
           import os
           import json
@@ -604,7 +600,7 @@ Resources:
               afterCommitId = destination_commit['Parameter']['Value'],
               content = content
             )
-      Runtime: "python3.7"
+      Runtime: "python3.12"
       Timeout: "35"
       MemorySize: 128
 
@@ -652,7 +648,6 @@ Resources:
       Role: !GetAtt 'LambdaPRCommentRole.Arn'
       Code:
         ZipFile: |
-          from __future__ import print_function
           import boto3
           import os
           import json
@@ -722,7 +717,7 @@ Resources:
                   'destinationCommit'
               ]
             )
-      Runtime: "python3.7"
+      Runtime: "python3.12"
       Timeout: "35"
       MemorySize: 128
 
@@ -985,7 +980,7 @@ Resources:
         Type: CODEPIPELINE
       Environment:
         ComputeType: 'BUILD_GENERAL1_SMALL'
-        Image: aws/codebuild/standard:5.0-22.06.30
+        Image: aws/codebuild/standard:7.0
         PrivilegedMode: True
         Type: LINUX_CONTAINER
         EnvironmentVariables:
@@ -1006,7 +1001,7 @@ Resources:
         Type: CODEPIPELINE
       Environment:
         ComputeType: 'BUILD_GENERAL1_SMALL'
-        Image: aws/codebuild/standard:5.0-22.06.30
+        Image: aws/codebuild/standard:7.0
         Type: LINUX_CONTAINER
         EnvironmentVariables:
           - Name: AWS_ACCOUNT_ID
@@ -1029,7 +1024,7 @@ Resources:
         Type: CODEPIPELINE
       Environment:
         ComputeType: BUILD_GENERAL1_SMALL
-        Image: aws/codebuild/standard:5.0-22.06.30
+        Image: aws/codebuild/standard:7.0
         PrivilegedMode: True
         Type: LINUX_CONTAINER
         EnvironmentVariables:
@@ -1069,7 +1064,7 @@ Resources:
         Type: CODEPIPELINE
       Environment:
         ComputeType: 'BUILD_GENERAL1_SMALL'
-        Image: aws/codebuild/standard:5.0-22.06.30
+        Image: aws/codebuild/standard:7.0
         PrivilegedMode: True
         Type: LINUX_CONTAINER
         EnvironmentVariables:

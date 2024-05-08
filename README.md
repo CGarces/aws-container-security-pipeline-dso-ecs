@@ -17,17 +17,18 @@ If you do not have Security Hub setup in your account, please follow the instruc
 
 5.	There are 2 zipfiles required which need to be created in the following way.
 
-		   cd initial-commit
+  		   mkdir devsecops
+  		   cd initial-commit
 		   zip -rj ../devsecops/initial-commit.zip ./*
 		   cd ../trivy-build 
 		   zip -rj ../devsecops/trivy-build.zip ./*
 
 
-6.	Upload the entire devsecops folder to the bucket.
+7.	Upload the entire devsecops folder to the bucket.
 
 		   aws s3 sync ../devsecops s3://<bucketname>/devsecops —region <region name>
 
-7.	Create a stack using the container-devsecops-demo.yml template and use the bucket name of the bucket that you just created as the DevSecOpsResourcesBucket Parameter.
+8.	Create a stack using the container-devsecops-demo.yml template and use the bucket name of the bucket that you just created as the DevSecOpsResourcesBucket Parameter.
 Once all the nested stacks have completed building, you’ll have a CICD (Continuous Integration, Continuous Delivery) pipeline with built in configurable security tools, that deploys new images to an Amazon ECS Fargate cluster.
 
 Now it’s time to clone the application repository to your local machine or to an AWS Cloud9 instance, if that’s what you’re running. You need the AWS Command Line Interface (AWS CLI) and Git commands available to update the application.

@@ -291,10 +291,7 @@ Resources:
               - logs:CreateLogStream
               - logs:PutLogEvents
             Effect: Allow
-            Resource:
-              !GetAtt
-                - TaskLoggingLogGroup
-                - Arn
+            Resource: !GetAtt TaskLoggingLogGroup.Arn
         Version: 2012-10-17
       PolicyName: TrivyTaskExecutionRoleDefaultPolicy
       Roles:
@@ -320,19 +317,13 @@ Resources:
             - ContainerPort: 8080
               Protocol: tcp
       Cpu: "1024"
-      ExecutionRoleArn:
-        !GetAtt
-          - TrivyTaskExecutionRole
-          - Arn
+      ExecutionRoleArn: !GetAtt TrivyTaskExecutionRole.Arn
       Family: TrivyFargateTask
       Memory: "6144"
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
-      TaskRoleArn:
-        !GetAtt
-          - TrivyTaskRole
-          - Arn
+      TaskRoleArn: !GetAtt TrivyTaskRole.Arn
     DependsOn:
       - CodeBuildStarter
 
@@ -355,9 +346,7 @@ Resources:
       LoadBalancerAttributes: []
       Scheme: internet-facing
       SecurityGroups:
-        - !GetAtt
-            - LBSecurityGroup
-            - GroupId
+        - !GetAtt LBSecurityGroup.GroupId
       Subnets:
         !Split
           - ","
@@ -378,16 +367,10 @@ Resources:
   LBSecurityGrouptoTrivyFargateServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
-      GroupId:
-        !GetAtt
-          - LBSecurityGroup
-          - GroupId
+      GroupId: !GetAtt LBSecurityGroup.GroupId
       IpProtocol: tcp
       Description: Load balancer to target
-      DestinationSecurityGroupId:
-        !GetAtt
-          - TrivyFargateServiceSecurityGroup
-          - GroupId
+      DestinationSecurityGroupId: !GetAtt TrivyFargateServiceSecurityGroup.GroupId
       FromPort: 8080
       ToPort: 8080
 
@@ -437,9 +420,7 @@ Resources:
         AwsvpcConfiguration:
           AssignPublicIp: DISABLED
           SecurityGroups:
-            - !GetAtt
-                - TrivyFargateServiceSecurityGroup
-                - GroupId
+            - !GetAtt TrivyFargateServiceSecurityGroup.GroupId
           Subnets:
             !Split
               - ","
@@ -453,14 +434,8 @@ Resources:
       IpProtocol: tcp
       Description: Load balancer to target
       FromPort: 8080
-      GroupId:
-        !GetAtt
-          - TrivyFargateServiceSecurityGroup
-          - GroupId
-      SourceSecurityGroupId:
-        !GetAtt
-          - LBSecurityGroup
-          - GroupId
+      GroupId: !GetAtt TrivyFargateServiceSecurityGroup.GroupId
+      SourceSecurityGroupId: !GetAtt LBSecurityGroup.GroupId
       ToPort: 8080
 
 
